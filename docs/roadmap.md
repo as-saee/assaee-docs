@@ -9,9 +9,9 @@ intensive research round *before* it is built; the module sections below are v1 
 ## Progress
 - [ ] **M0 — Setup**
   - [x] Author: create GitHub org `as-saee` (done 2026-10-09; Free plan; display name "As-Saee", GitHub URLs are case-insensitive)
-  - [ ] Author: register `as-saee.com` (Cloudflare Registrar; ~$10/yr, only needed before `api.as-saee.com` goes live)
+  - [ ] Author: register `as-saee.com` (Cloudflare Registrar; only needed before `api.as-saee.com` goes live)
   - [x] Author: Oracle Cloud account (free-only, Madrid home region; done 2026-10-09; home-region check pending)
-  - [ ] Author: other accounts, each when its milestone needs it: Cloudflare (before the domain), Discord (end of M1), Tailscale (M4), AWS + billing alarms $1/$5 (M6)
+  - [ ] Author: other accounts, each when its milestone needs it: Cloudflare (before the domain), Discord (end of M1), Tailscale (M4), AWS with billing alarms (M6)
   - [ ] Author: before M9, request a sunnah.com API key (GitHub issue on `sunnah-com/api`) and create a Quran Foundation developer app (both take approval time)
   - [x] Commit the Flutter baseline in this repo (staged files + the four files with unstaged edits)
   - [x] Create the six empty public repos in the org (done 2026-10-09: assaee-api/infra/gitops/docs/mobile, readflow-web)
@@ -67,11 +67,11 @@ daily, so the platform carries real traffic, real metrics and real incidents to 
 | Offline | Offline-first: local drift DB, last-edit-wins sync | Reading/gym/no-signal use. Single user, so conflicts are rare |
 | Data | PostgreSQL (CloudNativePG), one schema per module, UUIDv7 IDs, soft deletes, server-stamped `updated_at`, full JSON export; pgvector later | Sync needs these anyway; clean exportable data is the future AI training set; export is a good GDPR habit in the EU |
 | Files | PDFs and media in Cloudflare R2, not the database | Free 10 GB, S3-compatible |
-| Hosting | Oracle Always Free ARM k3s (Madrid), **free-only account** | €0; data stays in Spain. Reclaim risk accepted: all infra is rebuildable from Terraform/Ansible + backups |
-| AWS | Temporary Terraform-built replica, then `terraform destroy` | Proves AWS skills without a monthly bill (EKS alone ≈ $70/mo) |
+| Hosting | Oracle Always Free ARM k3s (Madrid), **free-only account** | Always Free tier; data stays in Spain. Reclaim risk accepted: all infra is rebuildable from Terraform/Ansible + backups |
+| AWS | Temporary Terraform-built replica, then `terraform destroy` | Proves AWS skills without running a permanent second environment |
 | Repos | Polyrepo under GitHub org `as-saee`, all public: `assaee-mobile`, `assaee-api` (API + worker), `assaee-infra`, `assaee-gitops`, `assaee-docs`, `readflow-web` (archived) | Author's choice. API publishes OpenAPI; mobile generates its client from it to stop drift |
 | Environments | Local (Compose) → staging (auto from `main`) → prod (tagged release). No preview envs yet | Free cluster memory is limited |
-| CI/CD | GitHub Actions: lint, test, build, Trivy, cosign, GHCR → GitOps commit → ArgoCD. Renovate. APK via GitHub Releases + Obtainium | ArgoCD is most common in job ads; nobody `kubectl apply`s by hand. Play Store ($25) can wait |
+| CI/CD | GitHub Actions: lint, test, build, Trivy, cosign, GHCR → GitOps commit → ArgoCD. Renovate. APK via GitHub Releases + Obtainium | ArgoCD is most common in job ads; nobody `kubectl apply`s by hand. Play Store publishing can wait |
 | Secrets | SOPS + age now; External Secrets + AWS Secrets Manager after moving to AWS | Free now; the migration is itself a portfolio story |
 | Ingress | Cloudflare DNS/TLS → Oracle free LB → Traefik with Gateway API + cert-manager | ingress-nginx was retired by the Kubernetes project in 2026; Gateway API is the future-proof skill |
 | Access / login | Admin tools only via Tailscale; Keycloak for app login and SSO | Keycloak is common in Spanish enterprises/banks |
@@ -153,12 +153,11 @@ with its source and, where it exists, what modern research says (author's choice
 ## Module v1 sketches (each gets its own research round before building)
 - **Reader (M5):** PDFs synced and offline; progress, bookmarks, highlights/notes as a commonplace book; reading goals feed the planner; widget fixes from the original reader roadmap. EPUB later.
 - **Planner (M7, the hub):** grows out of the M1 heartbeat (threads + rhythms stay the core). Today view by prayer windows + Anytime bucket; tasks with do-date, deadline, prayer anchor, RRULE recurrence; habits with weekly targets; day templates (al-Ghazali's awrad); evening muhasaba; fresh-start prompts on Jumu'ah / new Hijri month / Ramadan; configurable day rollover (summer Isha in Madrid ≈ 23:30). Single cross-module `plan_item` feed. See [`research-planner.md`](research/research-planner.md).
-- **Fitness (M8):** fast set logger, rest timer, PRs; calisthenics progressions, timed holds, weighted sets; football sessions; mobility routines; body weight; steps + sleep from Health Connect on app open; minimum version of every routine; starter packs Pehlwani + Baduanjin; fasting-day flag. Seed exercises from free-exercise-db (public domain). See [`research-fitness.md`](research/research-fitness.md).
+- **Fitness (M8):** fast set logger, rest timer, PRs; exercise progressions, timed holds, weighted sets; team-sport sessions; mobility routines; body weight; steps and sleep from Health Connect on app open; a minimum version of every routine; optional traditional-training routine packs. Seed exercises from free-exercise-db (public domain). See [`research-fitness.md`](research/research-fitness.md).
 - **Deen (M9):** prayer times — windows from Sahih Muslim 612, Standard Asr (shadow = 1×), Muslim World League angles by default + "match my mosque" offsets, qibla; madhab setting "no madhab — show the evidence"; Quran = Tanzil Arabic + Saheeh International (EN) + Isa García (ES) via QuranEnc terms; adhkar each traced to a cited hadith; hifz by mushaf page with FSRS, recite-then-reveal, lawh mode. Hard rules: never generated Quran/hadith text, AI answers only with exact citations, no fatwas, hadith grades stored with their grader. Public repos commit import scripts + checksums, not copyrighted texts. See [`research-islamic.md`](research/research-islamic.md).
 - **Later:** Spanish (v1 = habit tracking in the planner only), content creation (2027–28), RAG (~2027), fine-tuning (~2028).
 
 ## Risks
 - Oracle free ARM capacity is often "out of stock" — retry provisioning; free-only accounts can have idle VMs reclaimed.
 - Platform work can starve features forever; M5 (reader live) is the checkpoint that the platform serves a real app.
-- Exam fees (~$70 Terraform, ~$150 SAA, ~$445 CKA) are outside the €0 budget; book when funds allow.
 - Licensing: most Quran translations, tafsir, hadith translations and recitation audio are copyrighted — check each source before use.

@@ -14,7 +14,6 @@ at the same time a public portfolio for DevOps / cloud-architect roles in Spain.
   (Kubernetes, Terraform, GitOps, observability), not the cheapest way to host an app.
 - The features must be ones the author uses every day, so the platform carries real traffic, metrics and incidents
   to write about.
-- Budget is effectively €0. Anything that costs money has to be temporary, small, or deferred.
 - Single user for now, but with real accounts, and data kept in the EU.
 
 ## Decisions
@@ -33,11 +32,11 @@ at the same time a public portfolio for DevOps / cloud-architect roles in Spain.
 |---|---|---|
 | Career target | AWS + Kubernetes + Terraform; certifications in the order Terraform Associate → CKA → AWS SAA | Most common in DevOps/cloud job ads; each certification lines up with a milestone. |
 | Backend | Python FastAPI modular monolith plus a worker; AI service later | Python is the AI/ML language. Services are split only where scaling needs differ, which is a better story than many microservices for one user. |
-| Hosting | Oracle Always Free ARM, k3s, Madrid region, free-only account | €0 and data stays in Spain. The risk of reclaimed capacity is accepted because everything is rebuildable from Terraform/Ansible plus backups. |
-| AWS | Temporary Terraform-built replica, then `terraform destroy` | Shows AWS skills without a monthly bill (EKS alone is about $70/month). |
+| Hosting | Oracle Always Free ARM, k3s, Madrid region, free-only account | Runs on the Always Free tier and keeps data in Spain. The risk of reclaimed capacity is accepted because everything is rebuildable from Terraform/Ansible plus backups. |
+| AWS | Temporary Terraform-built replica, then `terraform destroy` | Shows AWS skills without running a permanent second environment. |
 | Repos | Polyrepo under the `as-saee` GitHub organisation, all public: `assaee-mobile`, `assaee-api`, `assaee-infra`, `assaee-gitops`, `assaee-docs`, `readflow-web` (archived) | The API publishes OpenAPI and the mobile app generates its client from it, which stops drift between repos. |
 | Environments | Local (Compose) → staging (auto from `main`) → prod (tagged release); no preview environments yet | Free cluster memory is limited. |
-| CI/CD | GitHub Actions: lint, test, build, Trivy scan, cosign signing, push to GHCR, GitOps commit, ArgoCD sync; Renovate; APK via GitHub Releases | Nobody runs `kubectl apply` by hand. ArgoCD is the most common GitOps tool in job ads. The Play Store fee can wait. |
+| CI/CD | GitHub Actions: lint, test, build, Trivy scan, cosign signing, push to GHCR, GitOps commit, ArgoCD sync; Renovate; APK via GitHub Releases | Nobody runs `kubectl apply` by hand. ArgoCD is the most common GitOps tool in job ads. Play Store publishing can wait. |
 | Secrets | SOPS + age now; External Secrets + AWS Secrets Manager after any move to AWS | Free now; the later migration is itself something to write about. |
 | Ingress | Cloudflare DNS/TLS → Oracle free load balancer → Traefik with Gateway API and cert-manager | `ingress-nginx` was retired by the Kubernetes project in 2026, so Gateway API is the future-proof skill. |
 | Access and login | Admin tools only over Tailscale; Keycloak for app login and single sign-on | Keycloak is common in Spanish enterprises and banks. |
@@ -57,8 +56,7 @@ The modules (reader, planner, fitness, deen) each get their own research round b
 - **Good:** a complete, realistic delivery path is public from early on; nothing depends on paid services; the data
   model is ready for sync, export and later AI use.
 - **Costs:** a lot of platform work before most features exist, so progress is checked against M5 (the reader running
-  on the platform). Polyrepo means changes that span API and app need two pull requests. Exam fees (about $70
-  Terraform, $150 SAA, $445 CKA) are outside the €0 budget and wait until money allows.
+  on the platform). Polyrepo means changes that span API and app need two pull requests.
 - **Risks:** Oracle free ARM capacity is often out of stock and idle free-tier VMs can be reclaimed; most Quran
   translations, tafsir and hadith translations are copyrighted, so each source is checked before use and public
   repos hold import scripts and checksums, not the texts.
@@ -76,6 +74,3 @@ setup, snooze and pause, and a daily cap on notifications. Notifications are del
 server (free, open source) with a "Done" action, until the mobile app can send its own. Storage in M1 is SQLite on a
 persistent volume, moving to CloudNativePG in M3. Not chosen: running as an Android system app, which needs root and
 buys nothing a normal app with exact-alarm permission cannot do.
-
-**Not recorded here:** alternatives that were considered and dropped during planning are only captured where the
-reason is stated above; the others were not written down at the time.
