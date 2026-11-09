@@ -1,9 +1,9 @@
 # Roadmap — As-Sa'ee (السعي, "the striving")
 
 Where the project is going and why. Decisions are recorded in [`adr/`](adr/); the research behind each module is in
-[`research/`](research/). Last full revision 2026-10-06; heartbeat decisions added 2026-10-09.
+[`research/`](research/). Last full revision 2026-10-06; heartbeat decisions added 2026-10-09; Life OS sequencing (ADR 0002) 2026-11-10.
 
-**Priority: career first.** The DevOps/cloud platform (M0–M4, M6) is the main focus. Each app module gets its own
+**Priority: career first.** The DevOps/cloud platform (M0–M4, S1) is the main focus. Each app module gets its own
 intensive research round *before* it is built; the module sections below are v1 sketches, not specs.
 
 ## Progress
@@ -11,8 +11,8 @@ intensive research round *before* it is built; the module sections below are v1 
   - [x] Author: create GitHub org `as-saee` (done 2026-10-09; Free plan; display name "As-Saee", GitHub URLs are case-insensitive)
   - [ ] Author: register `as-saee.com` (Cloudflare Registrar; only needed before `api.as-saee.com` goes live)
   - [x] Author: Oracle Cloud account (free-only, Madrid home region; done 2026-10-09; home-region check pending)
-  - [ ] Author: other accounts, each when its milestone needs it: Cloudflare (before the domain), Discord (end of M1), Tailscale (M4), AWS with billing alarms (M6)
-  - [ ] Author: before M9, request a sunnah.com API key (GitHub issue on `sunnah-com/api`) and create a Quran Foundation developer app (both take approval time)
+  - [ ] Author: other accounts, each when its milestone needs it: Cloudflare (before the domain), Discord (end of M1), Tailscale (M1), AWS with billing alarms (before S1)
+  - [ ] Author: before M8, request a sunnah.com API key (GitHub issue on `sunnah-com/api`) and create a Quran Foundation developer app (both take approval time)
   - [x] Commit the Flutter baseline in this repo (staged files + the four files with unstaged edits)
   - [x] Create the six empty public repos in the org (done 2026-10-09: assaee-api/infra/gitops/docs/mobile, readflow-web)
   - [ ] Split repos: the original Flutter app and React reader move into `assaee-mobile` and `readflow-web` with history kept; `readflow-web` is archived
@@ -24,7 +24,10 @@ intensive research round *before* it is built; the module sections below are v1 
   - [ ] Heartbeat storage: SQLite on a persistent volume (moves to CloudNativePG in M3)
   - [ ] Adaptive heartbeat v1: zero-setup threads, learned rhythm, snooze/pause, daily nudge budget (see "Heartbeat")
   - [ ] Self-hosted **ntfy** on the cluster → phone notifications with a "Done" action button (alarm-level priority for what matters)
-  - [ ] Capture inbox: share a link (e.g. a reel) from the phone into a "Research inbox" thread
+  - [ ] Capture inbox: share a link (e.g. a reel) from the phone into a "Research inbox" thread (saves the link, the time and an optional one-line note; no page fetching)
+  - [ ] Tailscale: API and ntfy reachable only over the tailnet, so the phone's Done button works before login exists (only `/health` is public)
+  - [ ] Optional client-generated `event_id` on touches, unique on the server, so retries cannot double-count
+  - [ ] Lived-in check after M1: about four weeks of real use, notes kept privately (repeats after M5 and M6)
   - [ ] CI: lint → test → build → Trivy → cosign → GHCR
   - [ ] ArgoCD watching `assaee-gitops`; Traefik + Gateway API + cert-manager → `https://api.as-saee.com/health`
   - [ ] External uptime check → Discord
@@ -33,6 +36,7 @@ intensive research round *before* it is built; the module sections below are v1 
   - [ ] Hugo blog at `blog.as-saee.com`, deployed by the pipeline
   - [ ] Staging (auto from `main`) and prod (tagged release) namespaces; promotion flow
   - [ ] SOPS + age secrets; Renovate on all repos; branch protection
+  - [ ] Thin Flutter app (M2–M3): thread list, Touch, home widget; touches queue offline with `event_id`s; ntfy stays the only nudge sender
 - [ ] **M3 — Data + observability** (study: CKA)
   - [ ] CloudNativePG Postgres; continuous backups to Oracle object storage, copy to Cloudflare R2
   - [ ] Monthly automated restore test → result posted to Discord; restore runbook
@@ -40,17 +44,21 @@ intensive research round *before* it is built; the module sections below are v1 
   - [ ] SLOs (e.g. 99.5% availability, p95 latency) with error-budget alerts
 - [ ] **M4 — Identity + access**
   - [ ] Keycloak; API auth (OIDC); Grafana + ArgoCD single sign-on
-  - [ ] Admin surfaces reachable only via Tailscale
+  - [ ] Admin surfaces reachable only via Tailscale (Tailscale itself arrives in M1)
 - [ ] **M5 — Reader module on the platform** (research round first)
-  - [ ] Reader schema, PDFs in R2 (copied to Oracle), offline-first sync (drift), data export endpoint
+  - [ ] Reader schema, PDFs in R2 (copied to Oracle), offline-first sync (drift), data export endpoint. PDFs only; EPUB is decided after the lived-in check. Assumes one device in year one
+  - [ ] First "where I left off" note, attached to a Reader passage (no pursuit tables before this)
   - [ ] Mobile CI: signed APK → GitHub Releases → Obtainium; Dart client generated from the API's OpenAPI spec
   - [ ] Widget fixes + reading features from the original reader roadmap (kept in `assaee-mobile`)
-- [ ] **M6 — AWS replica** (study: AWS Solutions Architect Associate)
+- [ ] **M6 — Planner v1** (research round first)
+  - [ ] Prayer times and windows built first as a small shared piece (on-device `adhan_dart`, MWL default, location, mosque offsets); Deen adds the rest later
+  - [ ] Threads and habits stay separate; finished workouts and reading sessions touch the thread you linked
+  - [ ] Decide the ntfy to local-notification handoff here (exact prayer-anchored alarms)
+- [ ] **M7 — Fitness v1** (research round first)
+- [ ] **M8 — Deen v1** (research round first)
+- [ ] **S1 — AWS replica, time-boxed side track** (study: AWS Solutions Architect Associate; about 2–3 weeks, any time after M4, never blocks M5–M8)
   - [ ] Same platform built on AWS with Terraform, tested, documented, destroyed
-- [ ] **M7 — Planner v1** (research round first)
-- [ ] **M8 — Fitness v1** (research round first)
-- [ ] **M9 — Deen v1** (research round first)
-- [ ] **Later:** hadith search · Spanish module · content creation (2027–28) · RAG over own data (~2027) · fine-tuned own model (~2028) · iPhone build
+- [ ] **Later:** hadith search · Spanish module · content creation (2027–28) · iPhone build · **Intellectual Companion** (committed, but starts only when its resource gate is met; no date; see the master plan). RAG and any fine-tuned model are methods for it, not milestones
 
 ## The idea
 As-Sa'ee is the author's personal "life OS" — reading, planning, fitness, deen, later content and Spanish — and,
@@ -97,7 +105,7 @@ out of mind": once you stop, nothing pulls the thread back.
 tap in v1. Automatic touches (GitHub commits, VS Code project opened, gym log) come later.
 
 **Why it goes in M1 instead of a hello endpoint:**
-- It was the original problem. On the old order it would arrive at M7, after months of platform work, so the app
+- It was the original problem. On the old order it would arrive with the Planner, after months of platform work, so the app
   would become one more delayed project, which is exactly the failure it is meant to fix.
 - It is small (threads, rhythm, last-touched, a "touched" action, a list of quiet threads), so the walking skeleton
   still goes live within weeks.
@@ -107,7 +115,7 @@ tap in v1. Automatic touches (GitHub commits, VS Code project opened, gym log) c
 
 **How it fits the design principles:** resurfacing must be a gentle return, not a guilt notification (principle 6).
 That means no streaks, no "you failed", no red counts, only "last touched N days ago" (principle 3, "no failed days,
-only returns"). The Planner (M7) grows out of the heartbeat; it does not replace it.
+only returns"). The Planner (M6) grows out of the heartbeat; it does not replace it.
 
 **Storage in M1:** SQLite on a persistent volume, because Postgres (CloudNativePG) arrives in M3. The move to Postgres
 in M3 becomes a real data-migration story for the blog.
@@ -131,7 +139,7 @@ is required except a name.
   touch needs no app; top priority acts like an alarm. The Flutter app later takes over with local notifications and
   real alarms (exact-alarm permission). Not a system app — no root needed.
 - **Kinds of thread:** *heartbeat* (book, projects, gym), *inbox* (research ideas captured from reels/links; the inbox
-  itself resurfaces when items pile up), and later *fixed-time* (prayers, M9). Follow-ups with people fit as inbox items
+  itself resurfaces when items pile up), and later *fixed-time* (prayers, M8). Follow-ups with people fit as inbox items
   with a person attached.
 - **"Smart" means plain statistics on the author's own data in v1, no paid AI APIs.** The own-AI plans (RAG ~2027)
   can build on this history later.
@@ -152,9 +160,9 @@ with its source and, where it exists, what modern research says (author's choice
 
 ## Module v1 sketches (each gets its own research round before building)
 - **Reader (M5):** PDFs synced and offline; progress, bookmarks, highlights/notes as a commonplace book; reading goals feed the planner; widget fixes from the original reader roadmap. EPUB later.
-- **Planner (M7, the hub):** grows out of the M1 heartbeat (threads + rhythms stay the core). Today view by prayer windows + Anytime bucket; tasks with do-date, deadline, prayer anchor, RRULE recurrence; habits with weekly targets; day templates (al-Ghazali's awrad); evening muhasaba; fresh-start prompts on Jumu'ah / new Hijri month / Ramadan; configurable day rollover (summer Isha in Madrid ≈ 23:30). Single cross-module `plan_item` feed. See [`research-planner.md`](research/research-planner.md).
-- **Fitness (M8):** fast set logger, rest timer, PRs; exercise progressions, timed holds, weighted sets; team-sport sessions; mobility routines; body weight; steps and sleep from Health Connect on app open; a minimum version of every routine; optional traditional-training routine packs. Seed exercises from free-exercise-db (public domain). See [`research-fitness.md`](research/research-fitness.md).
-- **Deen (M9):** prayer times — windows from Sahih Muslim 612, Standard Asr (shadow = 1×), Muslim World League angles by default + "match my mosque" offsets, qibla; madhab setting "no madhab — show the evidence"; Quran = Tanzil Arabic + Saheeh International (EN) + Isa García (ES) via QuranEnc terms; adhkar each traced to a cited hadith; hifz by mushaf page with FSRS, recite-then-reveal, lawh mode. Hard rules: never generated Quran/hadith text, AI answers only with exact citations, no fatwas, hadith grades stored with their grader. Public repos commit import scripts + checksums, not copyrighted texts. See [`research-islamic.md`](research/research-islamic.md).
+- **Planner (M6, the hub):** grows out of the M1 heartbeat (threads + rhythms stay the core). Today view by prayer windows + Anytime bucket; tasks with do-date, deadline, prayer anchor, RRULE recurrence; habits with weekly targets; day templates (al-Ghazali's awrad); evening muhasaba; fresh-start prompts on Jumu'ah / new Hijri month / Ramadan; configurable day rollover (summer Isha in Madrid ≈ 23:30). Single cross-module `plan_item` feed. See [`research-planner.md`](research/research-planner.md).
+- **Fitness (M7):** fast set logger, rest timer, PRs; exercise progressions, timed holds, weighted sets; team-sport sessions; mobility routines; body weight; steps and sleep from Health Connect on app open; a minimum version of every routine; optional traditional-training routine packs. Seed exercises from free-exercise-db (public domain). See [`research-fitness.md`](research/research-fitness.md).
+- **Deen (M8):** prayer times — (windows and `adhan_dart` are built earlier with the Planner, M6) windows from Sahih Muslim 612, Standard Asr (shadow = 1×), Muslim World League angles by default + "match my mosque" offsets, qibla; madhab setting "no madhab — show the evidence"; Quran = Tanzil Arabic + Saheeh International (EN) + Isa García (ES) via QuranEnc terms; adhkar each traced to a cited hadith; hifz by mushaf page with FSRS, recite-then-reveal, lawh mode. Hard rules: never generated Quran/hadith text, AI answers only with exact citations, no fatwas, hadith grades stored with their grader. Public repos commit import scripts + checksums, not copyrighted texts. See [`research-islamic.md`](research/research-islamic.md).
 - **Later:** Spanish (v1 = habit tracking in the planner only), content creation (2027–28), RAG (~2027), fine-tuning (~2028).
 
 ## Risks

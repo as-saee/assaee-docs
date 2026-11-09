@@ -74,3 +74,5 @@ setup, snooze and pause, and a daily cap on notifications. Notifications are del
 server (free, open source) with a "Done" action, until the mobile app can send its own. Storage in M1 is SQLite on a
 persistent volume, moving to CloudNativePG in M3. Not chosen: running as an Android system app, which needs root and
 buys nothing a normal app with exact-alarm permission cannot do.
+
+**2026-11-10: order of work refined.** [ADR 0002](0002-life-os-first-sequencing.md) changes the milestone order after M5 (Planner, Fitness, Deen, with the AWS replica as a time-boxed side track), moves Tailscale to M1 and adds an early thin mobile app. Everything else in this record stands.

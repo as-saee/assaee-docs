@@ -7,3 +7,4 @@ away, only superseded by a later record.
 | ADR | Title | Status |
 |---|---|---|
 | [0001](0001-platform-and-product-decisions.md) | Platform and product decisions for As-Sa'ee | Accepted |
+| [0002](0002-life-os-first-sequencing.md) | Life OS first: sequencing, access and sync decisions | Accepted |

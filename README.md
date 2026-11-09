@@ -8,7 +8,7 @@ thing disappears for days until you happen to remember it. The first feature is 
 thread has gone quiet longer than your own rhythm and brings it back gently, with no streaks and no guilt.
 
 ## Where to start
-- [Roadmap](docs/roadmap.md): milestones M0–M9, the reasoning, and current progress.
+- [Roadmap](docs/roadmap.md): milestones M0–M8 plus the time-boxed AWS side track S1, the reasoning, and current progress.
 - [Architecture decisions](docs/adr/): what was decided and why, starting with [ADR 0001](docs/adr/0001-platform-and-product-decisions.md).
 - [Research](docs/research/): the evidence behind each module (planner, fitness, Islamic sources, older approaches to
   habit and attention).
