@@ -1,7 +1,7 @@
 # Roadmap — As-Sa'ee (السعي, "the striving")
 
 Where the project is going and why. Decisions are recorded in [`adr/`](adr/); the research behind each module is in
-[`research/`](research/). Last full revision 2026-10-06; heartbeat decisions added 2026-10-09; Life OS sequencing (ADR 0002) 2026-11-10; Dig (ADR 0003) 2026-11-18.
+[`research/`](research/). Last full revision 2026-10-06; heartbeat decisions added 2026-10-09; Life OS sequencing (ADR 0002) 2026-11-10; Dig (ADR 0003) 2026-11-18; progress ticks and hosting note 2026-11-19.
 
 **Priority: career first.** The DevOps/cloud platform (M0–M4, S1) is the main focus. Each app module gets its own
 intensive research round *before* it is built; the module sections below are v1 sketches, not specs.
@@ -15,21 +15,21 @@ intensive research round *before* it is built; the module sections below are v1 
   - [ ] Author: before M8, request a sunnah.com API key (GitHub issue on `sunnah-com/api`) and create a Quran Foundation developer app (both take approval time)
   - [x] Commit the Flutter baseline in this repo (staged files + the four files with unstaged edits)
   - [x] Create the six empty public repos in the org (done 2026-10-09: assaee-api/infra/gitops/docs/mobile, readflow-web)
-  - [ ] Split repos: the original Flutter app and React reader move into `assaee-mobile` and `readflow-web` with history kept; `readflow-web` is archived
-  - [ ] `assaee-docs`: roadmap, research and ADR-001 (this repo)
+  - [ ] Repos: `assaee-mobile` now holds the As-Sa'ee Flutter app (research inbox first, pushed 2026-11-18); the original Readflow Flutter app is kept on its branch `readflow-original`. Still open: move the React reader into `readflow-web` and archive it
+  - [x] `assaee-docs`: roadmap, research, ADRs 0001–0003 and the master plan (this repo)
 - [ ] **M1 — Walking skeleton** (study: Terraform Associate)
-  - [ ] Terraform: Oracle network + ARM VM(s), Cloudflare DNS; state in Oracle object storage with locking
+  - [ ] Terraform: Oracle network + ARM VM(s), Cloudflare DNS; state in Oracle object storage with locking. **Parked 2026-11-12**: the platform runs locally with docker compose for now and moves to the author's own server later; the Oracle base (VCN) stays in `assaee-infra`, unextended
   - [ ] Ansible: OS hardening + k3s install
-  - [ ] `assaee-api`: FastAPI with `/health` + the **heartbeat** feature (see "Heartbeat" below), tests
-  - [ ] Heartbeat storage: SQLite on a persistent volume (moves to CloudNativePG in M3)
-  - [ ] Adaptive heartbeat v1: zero-setup threads, learned rhythm, snooze/pause, daily nudge budget (see "Heartbeat")
-  - [ ] Self-hosted **ntfy** on the cluster → phone notifications with a "Done" action button (alarm-level priority for what matters)
-  - [ ] Capture inbox: share a link (e.g. a reel) from the phone into a "Research inbox" thread (saves the link, the time and an optional one-line note; no page fetching)
-  - [ ] Tailscale: API and ntfy reachable only over the tailnet, so the phone's Done button works before login exists (only `/health` is public)
+  - [x] `assaee-api`: FastAPI with `/health` + the **heartbeat** feature (see "Heartbeat" below), tests (70 passing); every route except `/health` needs a shared API key until Keycloak (M4)
+  - [x] Heartbeat storage: SQLite on a persistent volume (moves to CloudNativePG in M3)
+  - [x] Adaptive heartbeat v1: zero-setup threads, learned rhythm, snooze/pause, daily nudge budget (see "Heartbeat")
+  - [ ] Self-hosted **ntfy** → phone notifications with a "Done" action button (alarm-level priority for what matters). Done so far: ntfy runs in docker compose with deny-all access, `POST /nudges/send` publishes to it, and a message reached the phone over Tailscale. Open: the Done button, a timer that calls `/nudges/send`, running on the cluster
+  - [ ] Capture inbox: share a link (e.g. a reel) from the phone into a "Research inbox" (saves the cleaned link, the time and an optional one-line note; no page fetching). Built 2026-11-18 as a native Android app (Share menu, tracking removed, saved on the phone, Done/Dropped, pile-up reminder; 45 tests, debug build passes). Open: use on the real phone, then the API endpoint
+  - [ ] Tailscale: API and ntfy reachable only over the tailnet, so the phone's Done button works before login exists (only `/health` is public). Done for ntfy (bound to the tailnet address); open for the API
   - [ ] Optional client-generated `event_id` on touches, unique on the server, so retries cannot double-count
   - [ ] Lived-in check after M1: about four weeks of real use, notes kept privately (repeats after M5 and M6)
   - [ ] **Dig** (decided in [ADR 0003](adr/0003-dig-research-from-the-inbox.md); built only after the lived-in check): a Dig button on an inbox item opens sources from a list you curate, with a reader view, three depth levels (Overview, Sources, Primary) and a "Done digging" that keeps the links opened. No AI in the core; an AI slot is kept for later
-  - [ ] CI: lint → test → build → Trivy → cosign → GHCR
+  - [ ] CI: lint → test → build → Trivy → cosign → GHCR. `assaee-api` has lint + test on GitHub Actions; build, scan, sign and push are open. No CI yet for `assaee-mobile`
   - [ ] ArgoCD watching `assaee-gitops`; Traefik + Gateway API + cert-manager → `https://api.as-saee.com/health`
   - [ ] External uptime check → Discord
   - [ ] Blog post #1 "Day 1 of building As-Sa'ee" (cross-post LinkedIn, dev.to)
