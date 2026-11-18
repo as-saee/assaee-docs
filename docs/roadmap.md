@@ -1,7 +1,7 @@
 # Roadmap — As-Sa'ee (السعي, "the striving")
 
 Where the project is going and why. Decisions are recorded in [`adr/`](adr/); the research behind each module is in
-[`research/`](research/). Last full revision 2026-10-06; heartbeat decisions added 2026-10-09; Life OS sequencing (ADR 0002) 2026-11-10.
+[`research/`](research/). Last full revision 2026-10-06; heartbeat decisions added 2026-10-09; Life OS sequencing (ADR 0002) 2026-11-10; Dig (ADR 0003) 2026-11-18.
 
 **Priority: career first.** The DevOps/cloud platform (M0–M4, S1) is the main focus. Each app module gets its own
 intensive research round *before* it is built; the module sections below are v1 sketches, not specs.
@@ -28,6 +28,7 @@ intensive research round *before* it is built; the module sections below are v1 
   - [ ] Tailscale: API and ntfy reachable only over the tailnet, so the phone's Done button works before login exists (only `/health` is public)
   - [ ] Optional client-generated `event_id` on touches, unique on the server, so retries cannot double-count
   - [ ] Lived-in check after M1: about four weeks of real use, notes kept privately (repeats after M5 and M6)
+  - [ ] **Dig** (decided in [ADR 0003](adr/0003-dig-research-from-the-inbox.md); built only after the lived-in check): a Dig button on an inbox item opens sources from a list you curate, with a reader view, three depth levels (Overview, Sources, Primary) and a "Done digging" that keeps the links opened. No AI in the core; an AI slot is kept for later
   - [ ] CI: lint → test → build → Trivy → cosign → GHCR
   - [ ] ArgoCD watching `assaee-gitops`; Traefik + Gateway API + cert-manager → `https://api.as-saee.com/health`
   - [ ] External uptime check → Discord

@@ -8,3 +8,4 @@ away, only superseded by a later record.
 |---|---|---|
 | [0001](0001-platform-and-product-decisions.md) | Platform and product decisions for As-Sa'ee | Accepted |
 | [0002](0002-life-os-first-sequencing.md) | Life OS first: sequencing, access and sync decisions | Accepted |
+| [0003](0003-dig-research-from-the-inbox.md) | Dig: guided research from a capture-inbox item | Accepted |
