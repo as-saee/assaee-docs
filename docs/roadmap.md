@@ -1,7 +1,7 @@
 # Roadmap — As-Sa'ee (السعي, "the striving")
 
 Where the project is going and why. Decisions are recorded in [`adr/`](adr/); the research behind each module is in
-[`research/`](research/). Last full revision 2026-10-06; heartbeat decisions added 2026-10-09; Life OS sequencing (ADR 0002) 2026-11-10; Dig (ADR 0003) 2026-11-18; progress ticks and hosting note 2026-11-19.
+[`research/`](research/). Last full revision 2026-10-06; heartbeat decisions added 2026-10-09; Life OS sequencing (ADR 0002) 2026-11-10; Dig (ADR 0003) 2026-11-18; progress ticks and hosting note 2026-11-19; ntfy Done button and API on Tailscale 2026-11-20.
 
 **Priority: career first.** The DevOps/cloud platform (M0–M4, S1) is the main focus. Each app module gets its own
 intensive research round *before* it is built; the module sections below are v1 sketches, not specs.
@@ -23,9 +23,9 @@ intensive research round *before* it is built; the module sections below are v1 
   - [x] `assaee-api`: FastAPI with `/health` + the **heartbeat** feature (see "Heartbeat" below), tests (70 passing); every route except `/health` needs a shared API key until Keycloak (M4)
   - [x] Heartbeat storage: SQLite on a persistent volume (moves to CloudNativePG in M3)
   - [x] Adaptive heartbeat v1: zero-setup threads, learned rhythm, snooze/pause, daily nudge budget (see "Heartbeat")
-  - [ ] Self-hosted **ntfy** → phone notifications with a "Done" action button (alarm-level priority for what matters). Done so far: ntfy runs in docker compose with deny-all access, `POST /nudges/send` publishes to it, and a message reached the phone over Tailscale. Open: the Done button, a timer that calls `/nudges/send`, running on the cluster
+  - [x] Self-hosted **ntfy** → phone notifications with a "Done" action button (alarm-level priority for what matters). Done so far: ntfy runs in docker compose with deny-all access; the API sends one batch of nudges a day (09:00, a built-in timer) and each nudge carries a **Done** button that calls the API with a link signed for that one thread, so the API key never travels in a notification (tested on the phone 2026-11-20). Open: running on the cluster
   - [ ] Capture inbox: share a link (e.g. a reel) from the phone into a "Research inbox" (saves the cleaned link, the time and an optional one-line note; no page fetching). Built 2026-11-18 as a native Android app (Share menu, tracking removed, saved on the phone, Done/Dropped, pile-up reminder; 45 tests, debug build passes). Open: use on the real phone, then the API endpoint
-  - [ ] Tailscale: API and ntfy reachable only over the tailnet, so the phone's Done button works before login exists (only `/health` is public). Done for ntfy (bound to the tailnet address); open for the API
+  - [x] Tailscale: API and ntfy reachable only over the tailnet, so the phone's Done button works before login exists (only `/health` and the signed Done link are open without the key). Done for ntfy and the API (both bound to the tailnet address, 2026-11-20)
   - [ ] Optional client-generated `event_id` on touches, unique on the server, so retries cannot double-count
   - [ ] Lived-in check after M1: about four weeks of real use, notes kept privately (repeats after M5 and M6)
   - [ ] **Dig** (decided in [ADR 0003](adr/0003-dig-research-from-the-inbox.md); built only after the lived-in check): a Dig button on an inbox item opens sources from a list you curate, with a reader view, three depth levels (Overview, Sources, Primary) and a "Done digging" that keeps the links opened. No AI in the core; an AI slot is kept for later
